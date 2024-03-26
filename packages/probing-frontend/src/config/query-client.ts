@@ -11,7 +11,7 @@ declare module '@tanstack/react-query' {
     TData = unknown,
     TError = unknown,
     TVariables = unknown,
-    TContext = unknown,
+    TContext = unknown
   > {
     loadingLabel?: string | ((variables: TVariables) => string)
     successToastLabel?: string | ((data: TData, variables: TVariables, context: TContext) => string)
