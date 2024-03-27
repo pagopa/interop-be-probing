@@ -1,0 +1,49 @@
+name: "Build & Push"
+
+on:
+  push:
+    branches:
+      - "develop"
+      - "main"
+    paths:
+      - "packages/**"
+
+jobs:
+  build_push_image:
+    name: ${{ matrix.image_name }}
+    runs-on: ubuntu-latest
+    environment: dev
+    permissions:
+      contents: read
+      id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image_name: probing-api
+            dockerfile_path: packages/probing-api
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: normalize branch name for tagging
+        run: |
+          NORM_TAG=$(echo "$GITHUB_REF_NAME" | tr -s "/" "-")
+          echo "NORM_TAG=$NORM_TAG" >> $GITHUB_ENV
+      - name: Log in to the Container registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        id: build_push
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          context: .
+          file: ${{ matrix.dockerfile_path }}/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:${{ env.NORM_TAG }}
