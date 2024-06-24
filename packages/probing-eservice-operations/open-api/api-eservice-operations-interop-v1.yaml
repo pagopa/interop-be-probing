@@ -539,6 +539,13 @@ paths:
         - Write
       operationId: saveEservice
       parameters:
+        - in: header
+          name: X-Correlation-Id
+          description: Correlation ID for tracking requests
+          required: true
+          schema:
+            type: string
+            format: uuid
         - name: eserviceId
           in: path
           required: true

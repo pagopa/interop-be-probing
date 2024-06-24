@@ -4,12 +4,21 @@ import { config } from "../utilities/config.js";
 
 export const producerServiceBuilder = (sqsClient: SQS.SQSClient) => {
   return {
-    async sendToServicesQueue(message: EserviceDto): Promise<void> {
+    async sendToServicesQueue(
+      message: EserviceDto,
+      correlationId: string,
+    ): Promise<void> {
       await SQS.sendMessage(
         sqsClient,
         config.sqsEndpointServicesQueue,
         JSON.stringify(message),
         config.sqsGroupId,
+        {
+          Header: {
+            DataType: "String",
+            StringValue: `{ "correlationId": "${correlationId}" }`,
+          },
+        },
       );
     },
   };

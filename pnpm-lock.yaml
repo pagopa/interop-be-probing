@@ -404,6 +404,9 @@ importers:
       '@tsconfig/node-lts':
         specifier: 20.1.1
         version: 20.1.1
+      '@types/uuid':
+        specifier: 9.0.7
+        version: 9.0.7
       dotenv-flow:
         specifier: 3.3.0
         version: 3.3.0
@@ -416,6 +419,9 @@ importers:
       ts-pattern:
         specifier: 5.0.6
         version: 5.0.6
+      uuid:
+        specifier: 10.0.0
+        version: 10.0.0
       zod:
         specifier: 3.22.4
         version: 3.22.4
@@ -7846,15 +7852,14 @@ packages:
     resolution: {integrity: sha512-yKpAGEuKRSS8wwx0joknWxsmLha78wNMe9R2S3UNsVOkZded8UqOrV8KoeDXoXsjndxwyF3eIhyClGbO1SEhEg==}
     dependencies:
       '@types/node': 20.10.4
-      '@types/ssh2': 0.5.52
+      '@types/ssh2': 1.11.19
     dev: true
 
-  /@types/dockerode@3.3.29:
-    resolution: {integrity: sha512-5PRRq/yt5OT/Jf77ltIdz4EiR9+VLnPF+HpU4xGFwUqmV24Co2HKBNW3w+slqZ1CYchbcDeqJASHDYWzZCcMiQ==}
+  /@types/dockerode@3.3.23:
+    resolution: {integrity: sha512-Lz5J+NFgZS4cEVhquwjIGH4oQwlVn2h7LXD3boitujBnzOE5o7s9H8hchEjoDK2SlRsJTogdKnQeiJgPPKLIEw==}
     dependencies:
       '@types/docker-modem': 3.0.6
       '@types/node': 20.10.4
-      '@types/ssh2': 0.5.52
     dev: true
 
   /@types/dotenv-flow@3.3.3:
@@ -7940,6 +7945,12 @@ packages:
       form-data: 3.0.1
     dev: false
 
+  /@types/node@18.19.9:
+    resolution: {integrity: sha512-oZFKlC8l5YtzGQNT4zC2PiSSKzQVZ8bAwwd+EYdPLtyk0nSEq6O16SkK+rkkT2eflDAbormJgEF3QnH3oDrTSw==}
+    dependencies:
+      undici-types: 5.26.5
+    dev: true
+
   /@types/node@20.10.4:
     resolution: {integrity: sha512-D08YG6rr8X90YB56tSIuBaddy/UXAA9RKJoFvrsnogAum/0pmjkgi4+2nx96A330FmioegBWmEYQ+syqCFaveg==}
     dependencies:
@@ -8012,6 +8023,12 @@ packages:
     dependencies:
       '@types/node': 20.10.4
       '@types/ssh2-streams': 0.1.12
+    dev: true
+
+  /@types/ssh2@1.11.19:
+    resolution: {integrity: sha512-ydbQAqEcdNVy2t1w7dMh6eWMr+iOgtEkqM/3K9RMijMaok/ER7L8GW6PwsOypHCN++M+c8S/UR9SgMqNIFstbA==}
+    dependencies:
+      '@types/node': 18.19.9
     dev: true
 
   /@types/stack-utils@2.0.3:
@@ -9631,8 +9648,8 @@ packages:
       prop-types: 15.8.1
     dev: false
 
-  /depseek@0.2.5:
-    resolution: {integrity: sha512-PD6M63smEnNCZ+3608u+4nDcmRr1MTicheYwh1t2/nivpxguOZGhce+URLlPrhd/4U5LBik/xw0PF5HC5ykVcg==}
+  /depseek@0.2.2:
+    resolution: {integrity: sha512-RqWAxWU2T49e39PQpJla4oIBoxXIFXgMd/vBZnTXk1hKH34kyo2G62C7tYKKnBxrj1WFfIvz74kFDTldXagE0Q==}
     dev: true
 
   /destroy@1.2.0:
@@ -13585,7 +13602,7 @@ packages:
     resolution: {integrity: sha512-FDJ3o3J8IMu1V7Uc6lNZ2MAD8+BV4HdpR/Vf5mHtgYHKdn6k1EbGFwtnvVNOxanJ99FCjf/EU8eA5ZQ4yjlsGA==}
     dependencies:
       '@balena/dockerignore': 1.0.2
-      '@types/dockerode': 3.3.29
+      '@types/dockerode': 3.3.23
       archiver: 5.3.2
       async-lock: 1.4.1
       byline: 5.0.0
@@ -13736,7 +13753,7 @@ packages:
     engines: {node: '>=16.0.0'}
     hasBin: true
     dependencies:
-      depseek: 0.2.5
+      depseek: 0.2.2
       fs-extra: 11.2.0
       globby: 13.2.2
       json5: 2.2.3

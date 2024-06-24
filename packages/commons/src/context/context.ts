@@ -5,7 +5,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { Logger, logger } from "../logging/index.js";
-import { readCorrelationIdHeader } from "../auth/headers.js";
+import { readCorrelationIdHeader } from "./headers.js";
 
 export const AppContext = z.object({
   serviceName: z.string(),
@@ -18,6 +18,7 @@ export type ZodiosContext = NonNullable<typeof zodiosCtx>;
 export type ExpressContext = NonNullable<typeof zodiosCtx.context>;
 
 export type WithLogger<T> = T & { logger: Logger };
+export type WithSQSMessageId<T> = T & { messageId?: string };
 
 export function fromAppContext(ctx: AppContext): WithLogger<AppContext> {
   return { ...ctx, logger: logger({ ...ctx }) };

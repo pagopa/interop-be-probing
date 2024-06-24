@@ -3,15 +3,19 @@ import { P, match } from "ts-pattern";
 import { z } from "zod";
 
 export const Headers = z.object({
-  "X-Correlation-Id": z.string().nullish(),
+  "X-Correlation-Id": z.string(),
 });
 
 export type Headers = z.infer<typeof Headers>;
 
+export const correlationIdToHeader = (correlationId: string): Headers => ({
+  "X-Correlation-Id": correlationId,
+});
+
 export const readCorrelationIdHeader = (req: Request): string | undefined =>
   match(req.headers)
     .with(
-      { "X-Correlation-Id": P.string },
-      (headers) => headers["X-Correlation-Id"],
+      { "x-correlation-id": P.string },
+      (headers) => headers["x-correlation-id"],
     )
     .otherwise(() => undefined);

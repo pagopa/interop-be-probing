@@ -7,6 +7,7 @@ import {
   Message,
   SQSClientConfig,
   SendMessageCommandInput,
+  MessageAttributeValue,
 } from "@aws-sdk/client-sqs";
 import { genericLogger } from "../logging/index.js";
 import { ConsumerConfig } from "../config/consumerConfig.js";
@@ -39,6 +40,7 @@ const processQueue = async (
 ): Promise<void> => {
   const command = new ReceiveMessageCommand({
     QueueUrl: config.queueUrl,
+    MessageAttributeNames: ["All"],
     WaitTimeSeconds: config.consumerPollingTimeout,
     MaxNumberOfMessages: 10,
   });
@@ -94,7 +96,8 @@ export const sendMessage = async (
   sqsClient: SQSClient,
   queueUrl: string,
   messageBody: string,
-  messageGroupId?: string,
+  messageGroupId?: string | null,
+  messageAttributes?: Record<string, MessageAttributeValue> | null,
 ): Promise<void> => {
   const messageCommandInput: SendMessageCommandInput = {
     QueueUrl: queueUrl,
@@ -103,6 +106,10 @@ export const sendMessage = async (
 
   if (messageGroupId) {
     messageCommandInput.MessageGroupId = messageGroupId;
+  }
+
+  if (messageAttributes) {
+    messageCommandInput.MessageAttributes = messageAttributes;
   }
 
   const command = new SendMessageCommand(messageCommandInput);

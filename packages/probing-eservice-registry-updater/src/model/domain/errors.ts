@@ -2,6 +2,7 @@
 import { P, match } from "ts-pattern";
 import { ZodError } from "zod";
 import { AxiosError } from "axios";
+import { Logger } from "pagopa-interop-probing-commons";
 export class ApplicationError<T> extends Error {
   public code: T;
   public title: string;
@@ -27,6 +28,13 @@ export class ApplicationError<T> extends Error {
   }
 }
 
+export const makeAppErrorLogString = (
+  appError: AppError,
+  originalError: unknown,
+): string => {
+  return `- title: ${appError.title} - detail: ${appError.detail} - original error: ${originalError}`;
+};
+
 export class AppError extends ApplicationError<string> {
   constructor({
     code,
@@ -45,10 +53,10 @@ export class AppError extends ApplicationError<string> {
 
 export function makeApplicationErrorBuilder<T extends string>(errors: {
   [K in T]: string;
-}): (error: unknown) => AppError {
+}): (error: unknown, logger: Logger) => AppError {
   const allErrors = { ...errorCodes, ...errors };
 
-  return (error: unknown) => {
+  return (error: unknown, logger: Logger) => {
     const makeApplicationError = ({
       code,
       title,
@@ -64,14 +72,18 @@ export function makeApplicationErrorBuilder<T extends string>(errors: {
 
     return match<unknown, AppError>(error)
       .with(P.instanceOf(AppError), (applicationError) => applicationError)
-      .with(P.instanceOf(ApplicationError<ErrorCodes>), (applicationError) =>
-        makeApplicationError(applicationError),
-      )
-      .otherwise((e) =>
-        makeApplicationError(
+      .with(P.instanceOf(ApplicationError<ErrorCodes>), (applicationError) => {
+        const appError = makeApplicationError(applicationError);
+        logger.warn(makeAppErrorLogString(appError, error));
+        return appError;
+      })
+      .otherwise((e) => {
+        const appError = makeApplicationError(
           genericError(e instanceof Error ? `${e.message}` : `${e}`),
-        ),
-      );
+        );
+        logger.warn(makeAppErrorLogString(appError, error));
+        return appError;
+      });
   };
 }
 

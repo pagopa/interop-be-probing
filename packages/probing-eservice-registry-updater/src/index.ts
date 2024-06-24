@@ -1,4 +1,4 @@
-import { genericLogger, SQS } from "pagopa-interop-probing-commons";
+import { SQS } from "pagopa-interop-probing-commons";
 import { config } from "./utilities/config.js";
 import { createApiClient } from "pagopa-interop-probing-eservice-operations-client";
 import { processMessage } from "./messagesHandler.js";
@@ -9,7 +9,7 @@ import {
 
 const operationsApiClient = createApiClient(config.operationsBaseUrl);
 
-const OperationsService: OperationsService =
+const operationsService: OperationsService =
   operationsServiceBuilder(operationsApiClient);
 
 const sqsClient: SQS.SQSClient = SQS.instantiateClient({
@@ -23,5 +23,5 @@ await SQS.runConsumer(
     consumerPollingTimeout: config.consumerPollingTimeout,
     runUntilQueueIsEmpty: true,
   },
-  processMessage(OperationsService),
-).catch(genericLogger.error);
+  processMessage(operationsService),
+);
